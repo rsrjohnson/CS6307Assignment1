@@ -7,8 +7,7 @@ DROP TABLE IF EXISTS Department;
 CREATE TABLE Department(
        Code VARCHAR primary key,
        Name VARCHAR,
-       Chairman  VARCHAR,
-       FOREIGN KEY (Chairman) REFERENCES Professor(NetID)
+       Chairman  VARCHAR     --FOREIGN KEY (Chairman) REFERENCES Professor(NetID)
        );
 
 DROP TABLE IF EXISTS Student;
@@ -42,6 +41,16 @@ CREATE TABLE Course(
       Department VARCHAR,
       foreign key (Department) references Department(Code));       
 
+DROP TABLE IF EXISTS Enrolls;
+CREATE TABLE Enrolls(
+    Course_ID VARCHAR,
+    NetID VARCHAR,
+    Semester VARCHAR,
+    Year INT,
+    PRIMARY KEY(Course_ID,NetID),
+    FOREIGN KEY (Course_ID) REFERENCES Course,
+    FOREIGN KEY (NetID) REFERENCES Student);
+
 
 INSERT INTO Department VALUES('CS','Computer Science','jxc694678');
 INSERT INTO Department VALUES('STAT','Statistics','lxs725089');
@@ -57,13 +66,28 @@ INSERT INTO Student VALUES('gxm732896','Guido', 'MISTA','CS', 0, 'sxn850670');
 select * from Student;
 
 PRAGMA foreign_keys = OFF;
-ALTER TABLE Department ADD FOREIGN KEY (Chairman) REFERENCES Professor(NetID);
 
-DROP TABLE IF EXISTS Enrolls;
-CREATE TABLE ENROLLS(
-     Semester VARCHAR,
-     Year INT
-);
+BEGIN TRANSACTION;
+
+CREATE TABLE Department_temp( 
+Code VARCHAR primary key,
+       Name VARCHAR,
+       Chairman  VARCHAR,     --
+       FOREIGN KEY (Chairman) REFERENCES Professor(NetID));
+
+INSERT INTO Department_temp SELECT * FROM Department;
+
+DROP TABLE Department;
+
+ALTER TABLE Department_temp RENAME TO Department;
+
+COMMIT;
+
+PRAGMA foreign_keys = ON;
+
+select * from department;
+
+
 
 
 
