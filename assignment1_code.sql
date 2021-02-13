@@ -1,4 +1,4 @@
-PRAGMA foreign_keys = ON;
+PRAGMA foreign_keys = OFF;
 
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS Student;
@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS Department;
 CREATE TABLE Department(
        Code VARCHAR primary key,
        Name VARCHAR,
-       Chairman  VARCHAR     --FOREIGN KEY (Chairman) REFERENCES Professor(NetID)
+       Chairman  VARCHAR,
+       FOREIGN KEY (Chairman) REFERENCES Professor(NetID)
        );
 
 DROP TABLE IF EXISTS Student;
@@ -61,34 +62,18 @@ INSERT INTO Professor VALUES('sxn850670','Sanchez','Noriega','Proctor','CS');
 
        
 INSERT INTO Student VALUES('pxg158054','Paul', 'Gulliard','STAT', 1,'jxc694678');
-INSERT INTO Student VALUES('gxm732896','Guido', 'MISTA','CS', 0, 'sxn850670');
-
-select * from Student;
-
-PRAGMA foreign_keys = OFF;
-
-BEGIN TRANSACTION;
-
-CREATE TABLE Department_temp( 
-Code VARCHAR primary key,
-       Name VARCHAR,
-       Chairman  VARCHAR,     --
-       FOREIGN KEY (Chairman) REFERENCES Professor(NetID));
-
-INSERT INTO Department_temp SELECT * FROM Department;
-
-DROP TABLE Department;
-
-ALTER TABLE Department_temp RENAME TO Department;
-
-COMMIT;
+INSERT INTO Student VALUES('gxm732896','Guido', 'Mista','CS', 0, 'sxn850670');
 
 PRAGMA foreign_keys = ON;
 
-select * from department;
+select * from Student;
+select * from Professor;
+select * from Department;
+
+UPDATE Professor
+SET Last_Name = 'Luis'
+WHERE NetID = 'jxc694678';
 
 
-
-
-
+select * from Department;
 
