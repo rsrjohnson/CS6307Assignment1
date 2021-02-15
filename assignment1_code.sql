@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS Student;
 DROP TABLE IF EXISTS Professor;
 DROP TABLE IF EXISTS Department;
+DROP TABLE IF EXISTS Enrolls;
 CREATE TABLE Department(
        Code VARCHAR primary key,
        Name VARCHAR,
@@ -39,8 +40,11 @@ DROP TABLE IF EXISTS Course;
 CREATE TABLE Course(
       Course_ID VARCHAR primary key,
       Course_Name VARCHAR,
-      Department VARCHAR,
-      foreign key (Department) references Department(Code));       
+      OfferBy VARCHAR,
+      TeachBy VARCHAR,
+      foreign key (OfferBy) references Department(Code)
+      foreign key (TeachBy) references Professor(NetID)     
+      );       
 
 DROP TABLE IF EXISTS Enrolls;
 CREATE TABLE Enrolls(
