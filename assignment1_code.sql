@@ -1,4 +1,4 @@
-PRAGMA foreign_keys = OFF;
+PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS Student;
@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS Department;
 CREATE TABLE Department(
        Code VARCHAR primary key,
        Name VARCHAR,
-       Chairman  VARCHAR,
+       Chairman  VARCHAR DEFAULT NULL,
        FOREIGN KEY (Chairman) REFERENCES Professor(NetID)
        );
 
@@ -53,8 +53,8 @@ CREATE TABLE Enrolls(
     FOREIGN KEY (NetID) REFERENCES Student);
 
 
-INSERT INTO Department VALUES('CS','Computer Science','jxc694678');
-INSERT INTO Department VALUES('STAT','Statistics','lxs725089');
+INSERT INTO Department VALUES('CS','Computer Science',NULL);
+INSERT INTO Department VALUES('STAT','Statistics',NULL);
 
 INSERT INTO Professor VALUES('jxc694678','Jose','Carlos','Senior','CS');
 INSERT INTO Professor VALUES('lxs725089','Luis','Salomon','Proctor','STAT');
@@ -62,9 +62,9 @@ INSERT INTO Professor VALUES('sxn850670','Sanchez','Noriega','Proctor','CS');
 
        
 INSERT INTO Student VALUES('pxg158054','Paul', 'Gulliard','STAT', 1,'jxc694678');
-INSERT INTO Student VALUES('gxm732896','Guido', 'Mista','CS', 0, 'sxn850670');
+INSERT INTO Student VALUES('gxm732896','Guido', 'Mista','CS', 0, NULL);
 
-PRAGMA foreign_keys = ON;
+
 
 select * from Student;
 select * from Professor;
@@ -73,6 +73,10 @@ select * from Department;
 UPDATE Professor
 SET Last_Name = 'Luis'
 WHERE NetID = 'jxc694678';
+
+UPDATE Department
+SET Chairman = 'sxn850670'
+WHERE Code = 'CS';
 
 
 select * from Department;
