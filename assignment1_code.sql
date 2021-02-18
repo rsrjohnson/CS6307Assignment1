@@ -62,10 +62,8 @@ END;
 DROP TABLE IF EXISTS Course;
 CREATE TABLE Course(
       Course_ID VARCHAR primary key NOT NULL,
-      Course_Name VARCHAR NOT NULL,
-      OfferBy VARCHAR,
-      TeachBy VARCHAR,
-      foreign key (OfferBy) references Department(Code)
+      Course_Name VARCHAR NOT NULL,     
+      TeachBy VARCHAR,      
       foreign key (TeachBy) references Professor(NetID)     
       );      
        
@@ -123,13 +121,14 @@ UPDATE Professor
 SET Last_Name = 'Luis'
 WHERE NetID = 'jxc694678';
 
+INSERT INTO course VALUES('md','Discreta', 'jxc694678');
+INSERT INTO course VALUES('STAt','stat 101', 'lxs725089');
+INSERT INTO course VALUES('opt','Optimizacion', 'lxs725089');
+INSERT INTO course VALUES('eda','EDA', 'sxn850670');
 
 select * from course;
 
-INSERT INTO course VALUES('md','Discreta', 'CS', 'jxc694678');
-INSERT INTO course VALUES('STAt','stat 101', 'STAT', 'lxs725089');
-INSERT INTO course VALUES('opt','Optimizacion', 'STAT', 'lxs725089');
-INSERT INTO course VALUES('eda','EDA', 'CS', 'sxn850670');
+
 
 select * from Graduate;
 INSERT INTO Student VALUES('pxg158088','Andrea', 'Perez','CS',0);
