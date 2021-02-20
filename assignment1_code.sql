@@ -24,11 +24,9 @@ CREATE TABLE Student(
        
 DROP TABLE IF EXISTS Graduate;
 CREATE TABLE Graduate(
-    NetID VARCHAR NOT NULL,
-    Advisor VARCHAR NOT NULL,
-    primary key(NetID,Advisor) 
-    foreign key (NetID) references Student(NetID)
-    foreign key (Advisor) references Professor(NetID)
+    NetID VARCHAR primary key NOT NULL,
+    Advisor VARCHAR NOT NULL,    
+    foreign key (NetID) references Student(NetID)    
 );
 
 --Ensuring that a student can have an adviser only if the student is graduate 
@@ -148,3 +146,6 @@ Select professor.First_Name from (select * from (select * from student join enro
 select professor.First_Name from professor where professor.IsChairman=1;
 select student.First_Name from student join graduate on student.NetID = graduate.NetID;
 select * from Professor join (select TeachBy from Course join (select Course_ID from student join enrolls on student.netid=enrolls.NetID where student.First_Name='Andrea') Q on course.Course_ID=Q.Course_ID) W on Professor.NetID=W.TeachBy;
+
+select professor.First_Name from professor where professor.IsChairman=1;
+select student.First_Name from student join graduate on student.NetID = graduate.NetID;
