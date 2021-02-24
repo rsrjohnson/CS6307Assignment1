@@ -19,7 +19,7 @@ CREATE TABLE Student(
        NetID VARCHAR primary key NOT NULL,
        First_Name VARCHAR NOT NULL,
        Last_Name  VARCHAR NOT NULL,
-       Major VARCHAR,
+       Major VARCHAR NOT NULL,
        IsGraduate INT NOT NULL,  --Enter 1 for Graduate, 0 for not Graduate
        foreign key (Major) references Department(Code)
        );
@@ -51,7 +51,7 @@ CREATE TABLE Professor(
        NetID VARCHAR primary key NOT NULL,
        First_Name VARCHAR NOT NULL, 
        Last_Name  VARCHAR NOT NULL,
-       Rank VARCHAR,
+       Rank VARCHAR NOT NULL,
        Department VARCHAR NOT NULL,
        IsChairman INT NOT NULL, --Enter 1 for Chairman, 0 for not Chairman
        foreign key (Department) references Department(Code));
