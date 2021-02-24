@@ -1,37 +1,39 @@
+--Enabling foreign keys
 PRAGMA foreign_keys = ON;
 
+--Dropping Tables to run examples
 DROP TABLE IF EXISTS Graduate;
 DROP TABLE IF EXISTS Enrolls;
 DROP TABLE IF EXISTS Student;
 DROP TABLE IF EXISTS Course;
 DROP TABLE IF EXISTS Professor;
-
+DROP TABLE IF EXISTS Department;
 
 DROP TABLE IF EXISTS Department;
 CREATE TABLE Department(
-       Code VARCHAR primary key NOT NULL,
+       Code VARCHAR PRIMARY KEY NOT NULL,
        Name VARCHAR NOT NULL      
        );
        
        
 DROP TABLE IF EXISTS Student;
 CREATE TABLE Student(
-       NetID VARCHAR primary key NOT NULL,
+       NetID VARCHAR PRIMARY KEY NOT NULL,
        First_Name VARCHAR NOT NULL,
        Last_Name  VARCHAR NOT NULL,
        Major VARCHAR NOT NULL,
        IsGraduate INT NOT NULL,  --Enter 1 for Graduate, 0 for not Graduate
-       foreign key (Major) references Department(Code)
+       FOREIGN KEY (Major) REFERENCES Department(Code)
        );
        
 
 --Only Graduate students will have an Advisor
 DROP TABLE IF EXISTS Graduate;
 CREATE TABLE Graduate(
-    NetID VARCHAR primary key NOT NULL,
+    NetID VARCHAR PRIMARY KEY NOT NULL,
     Advisor VARCHAR NOT NULL,    
-    foreign key (NetID) references Student(NetID),
-    foreign key (Advisor) references Professor(NetID)    
+    FOREIGN KEY (NetID) REFERENCES Student(NetID),
+    FOREIGN KEY (Advisor) REFERENCES Professor(NetID)    
     );
 
 
@@ -44,17 +46,18 @@ BEGIN
     SELECT RAISE(ABORT, "The Student is not Graduate");
 END;
 
-
+--Rules
 --A Professor can advise many graduate students
+--A professor can be chairman (value of 1 on IsChairman) of the department that he belongs to, there is only one chairman per department.
 DROP TABLE IF EXISTS Professor;
 CREATE TABLE Professor(
-       NetID VARCHAR primary key NOT NULL,
+       NetID VARCHAR PRIMARY KEY NOT NULL,
        First_Name VARCHAR NOT NULL, 
        Last_Name  VARCHAR NOT NULL,
        Rank VARCHAR NOT NULL,
        Department VARCHAR NOT NULL,
        IsChairman INT NOT NULL, --Enter 1 for Chairman, 0 for not Chairman
-       foreign key (Department) references Department(Code));
+       FOREIGN KEY (Department) REFERENCES Department(Code));
        
 
 --Ensuring that we have only one chairman per department
@@ -69,10 +72,10 @@ END;
 
 DROP TABLE IF EXISTS Course;
 CREATE TABLE Course(
-      Course_ID VARCHAR primary key NOT NULL,
+      Course_ID VARCHAR PRIMARY KEY NOT NULL,
       Course_Name VARCHAR NOT NULL,     
       TeachBy VARCHAR NOT NULL,      
-      foreign key (TeachBy) references Professor(NetID)     
+      FOREIGN KEY (TeachBy) REFERENCES Professor(NetID)     
       );      
       
        
@@ -107,9 +110,11 @@ INSERT INTO Student VALUES('jxt125897','Joe', 'Tolvard','STAT',1);
 INSERT INTO Student VALUES('bxp177689','Blaise', 'Pascal','CS', 0);
 INSERT INTO Student VALUES('axp158088','Andrea', 'Perez','CS',0);
 INSERT INTO Student VALUES('lxv732866','Lucas', 'Vazquez','STAT', 1);
+INSERT INTO Student VALUES('nxc101010','Noan', 'Chozky','CS', 1);
 
 INSERT INTO Graduate VALUES('pxg158054','lxs725089');
 INSERT INTO Graduate VALUES('jxt125897','lxs725089');
+INSERT INTO Graduate VALUES('nxc101010','pxd967815');
 
 --INSERT INTO Graduate VALUES('bxp177689','lxs725089'); --this will call the trigger, since the student is not graduate
 
@@ -139,4 +144,7 @@ select Professor.First_Name, Professor.Last_Name from professor where professor.
 select Name from (select Department from Course join Professor on TeachBy = NetID where Course_Name='Optimization') h join Department d on h.Department=d.Code;
 
 --Finding who teaches Andrea
-Select Professor.First_Name, Professor.Last_Name from (select TeachBy from (select Course_ID from Student join Enrolls on Student.NetID = Enrolls.NetID where Student.First_Name = 'Andrea') h join Course on h.Course_ID = Course.Course_ID) k join Professor on Professor.Netid = k.TeachBy;
+select Professor.First_Name, Professor.Last_Name from (select TeachBy from (select Course_ID from Student join Enrolls on Student.NetID = Enrolls.NetID where Student.First_Name = 'Andrea') h join Course on h.Course_ID = Course.Course_ID) k join Professor on Professor.Netid = k.TeachBy; 
+
+--Finding the advisor of a specific student
+select First_Name, Last_Name from Professor join (select Advisor from Graduate join Student on Graduate.NetID=Student.NetID WHERE Student.First_Name='Noan') n on n.Advisor=Professor.NetID;
