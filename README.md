@@ -1,4 +1,4 @@
-# CS6307Assignment1
+# CS6307Project1
 Repo for CS6307 Project 1 - Design of a Relational Data Model for a University Enrollment System
 
 ## ER-Diagram
